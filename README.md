@@ -8,6 +8,39 @@ update @ 2025/06/24
 
 - CAN1 : RX:P10_7 (polling , with RX rule , to filter ID DATA) , TX:P10_6 (polling)
 
+	- check : p->rrt_handle[q].mask.bit.MID=ALL_ID_BIT_IS_NOT_COMPARED;
+
+```c
+
+static void can_rrt_set(CAN_REG_TYP * can,
+                          CAN_BUS_HANDLE *p,
+                          const CAN_RX_RULE_TABLE_T *rule)
+{
+    unsigned int q=0;
+
+    for(q=0;q<CAN_RX_RULE_TABLE_AMOUNT;q++)
+    {
+        //RCFDCnCFDGAFLIDj
+        p->rrt_handle[q].id.bit.ID=q;
+        p->rrt_handle[q].id.bit.LB=0;
+        p->rrt_handle[q].id.bit.IDE=0;
+        p->rrt_handle[q].id.bit.RTR=0;
+        
+        //RCFDCnCFDGAFLMj
+        p->rrt_handle[q].mask.bit.MID=STANDARD_ID_BIT_IS_COMPARED;
+        // p->rrt_handle[q].mask.bit.MID=EXTEND_ID_BIT_IS_COMPARED;//The corresponding ID bit is compared
+        // p->rrt_handle[q].mask.bit.MID=ALL_ID_BIT_IS_NOT_COMPARED;
+
+
+```
+
+```c
+
+#define CAN_USE_RX_RULE
+#define CAN_RX_POLLING
+// #define CAN_RX_INTERRUPT
+
+```
 2. Below is EVB switch
 
 ![image](https://github.com/released/Sample_Project_RH850_S1_CAN_FD_RX_Polling_With_Rule/blob/main/EVB_CAN_cfg.jpg)
@@ -44,7 +77,7 @@ digit 4 ,
 - RX rule , check : tbl_can_bus_rx_rule_ch1
 
 
-- rule 0 , filter ID : 100 , accept Data Frame , Extend ID , compare RTR(Data frame or Remote frame), compare IDE(Standard ID or Extended ID)
+- rule 0 , filter ID : 100 , accept Data Frame , Extended ID , compare RTR(Data frame or Remote frame), compare IDE(Standard ID or Extended ID)
 
 ![image](https://github.com/released/Sample_Project_RH850_S1_CAN_FD_RX_Polling_With_Rule/blob/main/rx_rule_0_ID_100.jpg)
 
@@ -54,7 +87,7 @@ digit 4 ,
 ![image](https://github.com/released/Sample_Project_RH850_S1_CAN_FD_RX_Polling_With_Rule/blob/main/rx_rule_1_ID_101.jpg)
 
 
-- rule 2 , filter ID : 102 , accept Remote Frame , Extend ID , compare RTR(Data frame or Remote frame), compare IDE(Standard ID or Extended ID)
+- rule 2 , filter ID : 102 , accept Remote Frame , Extended ID , compare RTR(Data frame or Remote frame), compare IDE(Standard ID or Extended ID)
 
 ![image](https://github.com/released/Sample_Project_RH850_S1_CAN_FD_RX_Polling_With_Rule/blob/main/rx_rule_2_ID_102.jpg)
 
@@ -64,7 +97,7 @@ digit 4 ,
 ![image](https://github.com/released/Sample_Project_RH850_S1_CAN_FD_RX_Polling_With_Rule/blob/main/rx_rule_3_ID_103.jpg)
 
 
-- rule 4 , filter ID : 104 , accept Data Frame , Extend ID , compare RTR(Data frame or Remote frame), NOT compare IDE(Standard ID or Extended ID)
+- rule 4 , filter ID : 104 , accept Data Frame , Extended ID , compare RTR(Data frame or Remote frame), NOT compare IDE(Standard ID or Extended ID)
 
 ![image](https://github.com/released/Sample_Project_RH850_S1_CAN_FD_RX_Polling_With_Rule/blob/main/rx_rule_4_ID_104.jpg)
 
