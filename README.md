@@ -8,7 +8,7 @@ update @ 2025/06/24
 
 - CAN1 : RX:P10_7 (polling , with RX rule , to filter ID DATA) , TX:P10_6 (polling)
 
-	- check : p->rrt_handle[q].mask.bit.MID=ALL_ID_BIT_IS_NOT_COMPARED;
+	- check : p->rrt_handle[q].mask.bit.MID=STANDARD_ID_BIT_IS_COMPARED;
 
 ```c
 
